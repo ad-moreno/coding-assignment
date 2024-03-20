@@ -10,6 +10,7 @@ import Starred from './components/Starred';
 import WatchLater from './components/WatchLater';
 import YouTubePlayer from './components/YoutubePlayer';
 import './app.scss';
+import Modal from './components/Modal';
 
 const App = () => {
   const state = useSelector(state => state);
@@ -73,16 +74,7 @@ const App = () => {
   return (
     <div className="App">
       <Header searchMovies={searchMovies} searchParams={searchParams} setSearchParams={setSearchParams} />
-
       <div className="container">
-        {videoKey ? (
-          <YouTubePlayer videoKey={videoKey} />
-        ) : (
-          <div style={{padding: '30px'}}>
-            <h6>no trailer available. Try another movie</h6>
-          </div>
-        )}
-
         <Routes>
           <Route path="/" element={<Movies movies={movies} viewTrailer={viewTrailer} closeCard={closeCard} />} />
           <Route path="/starred" element={<Starred viewTrailer={viewTrailer} />} />
@@ -90,6 +82,9 @@ const App = () => {
           <Route path="*" element={<h1 className="not-found">Page Not Found</h1>} />
         </Routes>
       </div>
+      <Modal isOpen={isOpen} onClose={closeModal}>
+        <YouTubePlayer videoKey={videoKey} />
+      </Modal>
     </div>
   );
 };
