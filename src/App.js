@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Routes, Route, createSearchParams, useSearchParams, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import 'reactjs-popup/dist/index.css';
@@ -40,13 +40,13 @@ const App = () => {
     getSearchResults(query);
   };
 
-  const getMovies = () => {
+  const getMovies = useCallback(() => {
     if (searchQuery) {
       dispatch(fetchMovies(`${ENDPOINT_SEARCH}&query=` + searchQuery));
     } else {
       dispatch(fetchMovies(ENDPOINT_DISCOVER));
     }
-  };
+  }, [dispatch, searchQuery]);
 
   const viewTrailer = movie => {
     getMovie(movie.id);
@@ -68,7 +68,7 @@ const App = () => {
 
   useEffect(() => {
     getMovies();
-  }, []);
+  }, [getMovies]);
 
   return (
     <div className="App">
