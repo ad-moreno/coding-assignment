@@ -2,6 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {API_KEY, ENDPOINT, ENDPOINT_DISCOVER, ENDPOINT_SEARCH} from '../constants';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
+import {useDebounce} from 'use-debounce';
 
 const fetchMovies = async apiUrl => {
   const response = await fetch(apiUrl);
@@ -39,7 +40,7 @@ export const useMovies = () => {
   const totalPagesRef = useRef(Infinity);
 
   const [searchParams] = useSearchParams();
-  const search = searchParams.get('search');
+  const [search] = useDebounce(searchParams.get('search'), 500);
 
   /** Switch between modes depending on "search" search parameter */
   useEffect(() => {
