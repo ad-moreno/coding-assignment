@@ -12,7 +12,6 @@ const Movie = ({movie, viewTrailer, closeCard}) => {
   const dispatch = useDispatch();
 
   const myClickHandler = e => {
-    if (!e) var e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
     e.target.parentElement.parentElement.classList.remove('opened');
