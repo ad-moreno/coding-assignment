@@ -5,7 +5,7 @@ import App from './App';
 
 it('renders watch later link', () => {
   renderWithProviders(<App />);
-  const linkElement = screen.getByText(/watch later/i);
+  const linkElement = screen.getByTestId('watch-later-link');
   expect(linkElement).toBeInTheDocument();
 });
 
@@ -25,7 +25,7 @@ it('search for movies', async () => {
 it('renders watch later component', async () => {
   renderWithProviders(<App />);
   const user = userEvent.setup();
-  await user.click(screen.getByText(/watch later/i));
+  await user.click(screen.getByTestId('watch-later-link'));
   expect(screen.getByText(/You have no movies saved to watch later/i)).toBeInTheDocument();
 });
 

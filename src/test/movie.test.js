@@ -1,7 +1,12 @@
-import {screen, waitFor} from '@testing-library/react';
+import {fireEvent, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {renderWithProviders} from './utils';
 import App from '../App';
+
+beforeEach(() => {
+  /** Set an innerHeight for scroll tests */
+  global.innerHeight = 500;
+});
 
 it('movies starred and saved to watch later', async () => {
   renderWithProviders(<App />);
@@ -32,4 +37,20 @@ it('movies starred and saved to watch later', async () => {
   });
 
   await userEvent.click(screen.getAllByTestId('remove-watch-later')[0]);
+});
+
+it('should load more items when reaching the bottom', async () => {
+  renderWithProviders(<App />);
+
+  await waitFor(() => {
+    expect(screen.getAllByTestId('movie').length).toBe(20);
+  });
+
+  jest.spyOn(document.documentElement, 'scrollTop', 'get').mockImplementation(() => 1000);
+  jest.spyOn(global.document.documentElement, 'offsetHeight', 'get').mockImplementation(() => 1500);
+
+  fireEvent.scroll(window);
+  await waitFor(() => {
+    expect(screen.getAllByTestId('movie').length).toBe(40);
+  });
 });

@@ -1,12 +1,21 @@
 import React from 'react';
 import {render} from '@testing-library/react';
 import {Provider} from 'react-redux';
-import {BrowserRouter} from 'react-router-dom';
+import {MemoryRouter} from 'react-router-dom';
 import {configureStore} from '@reduxjs/toolkit';
 import {setupListeners} from '@reduxjs/toolkit/dist/query';
-import moviesSlice from '../data/moviesSlice';
 import starredSlice from '../data/starredSlice';
 import watchLaterSlice from '../data/watchLaterSlice';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: Infinity,
+      retry: false,
+    },
+  },
+});
 
 export function renderWithProviders(
   ui,
@@ -14,7 +23,6 @@ export function renderWithProviders(
     preloadedState = {},
     store = configureStore({
       reducer: {
-        movies: moviesSlice.reducer,
         starred: starredSlice.reducer,
         watchLater: watchLaterSlice.reducer,
       },
@@ -28,7 +36,9 @@ export function renderWithProviders(
   function Wrapper({children}) {
     return (
       <Provider store={store}>
-        <BrowserRouter>{children}</BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <MemoryRouter>{children}</MemoryRouter>
+        </QueryClientProvider>
       </Provider>
     );
   }

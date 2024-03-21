@@ -25,7 +25,7 @@ const Header = ({onSearch}) => {
             <i className="bi bi-star" />
           )}
         </NavLink>
-        <NavLink to="/watch-later" className="nav-fav">
+        <NavLink to="/watch-later" className="nav-fav" data-testid="watch-later-link">
           watch later
         </NavLink>
       </nav>
